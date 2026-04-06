@@ -59,17 +59,27 @@ jobs:
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/coc-member-backend:${{ steps.env.outputs.TAG }}
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/coc-member-frontend:${{ steps.env.outputs.TAG }}
 
+          
+          cd /home/ubuntu
+          
+          # If app folder doesn't exist → clone
           if [ ! -d "app" ]; then
-            git clone https://github.com/samrth07/codenest.git app
+            git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git app
           fi
-
+          
           cd app
-
-          # Pull latest code (for docker-compose.yml updates)
+          
+          # If .git missing → re-clone 
+          if [ ! -d ".git" ]; then
+            cd ..
+            rm -rf app
+            git clone https://github.com/samrth07/codenest.git app
+            cd app
+          fi
+          
+          # Pull latest code
           git pull
-
-          # Stop old containers
-          sudo docker-compose down
-
-          # Start new containers
-          sudo docker-compose up -d
+          
+          # Run docker-compose from correct path
+          sudo docker-compose -f docker-compose.yml down
+          sudo docker-compose -f docker-compose.yml up -d
