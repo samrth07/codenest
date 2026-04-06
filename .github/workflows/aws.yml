@@ -55,9 +55,21 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/coc-member-backend:${{ steps.env.outputs.TAG }}
-          docker pull ${{ secrets.DOCKER_USERNAME }}/coc-member-frontend:${{ steps.env.outputs.TAG }}
+          # Pull latest images
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/coc-member-backend:${{ steps.env.outputs.TAG }}
+          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/coc-member-frontend:${{ steps.env.outputs.TAG }}
+
+          if [ ! -d "app" ]; then
+            git clone https://github.com/samrth07/codenest.git app
+          fi
 
           cd app
-          docker-compose down
-          docker-compose up -d
+
+          # Pull latest code (for docker-compose.yml updates)
+          git pull
+
+          # Stop old containers
+          sudo docker-compose down
+
+          # Start new containers
+          sudo docker-compose up -d
