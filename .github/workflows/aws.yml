@@ -79,6 +79,9 @@ jobs:
           
           # Pull latest code
           git pull
+
+          echo "${{ secrets.BACKEND_ENV }}" > backend/.env
+          echo "${{ secrets.FRONTEND_ENV }}" > frontend/.env
           
           # Run docker-compose from correct path
           sudo docker-compose -f docker-compose.yml down
