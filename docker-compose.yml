@@ -1,6 +1,6 @@
 services:
     server:
-        image: coc-member-backend
+        image: samlad07/coc-member-backend:latest
         build:
             context: ./backend
             dockerfile: ../docker/Dockerfile.backend
@@ -18,7 +18,7 @@ services:
             retries: 3
 
     web:
-        image: coc-member-frontend
+        image: samlad07/coc-member-frontend:latest
         build:
             context: ./frontend
             dockerfile: ../docker/Dockerfile.frontend
